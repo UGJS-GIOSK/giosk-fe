@@ -175,21 +175,14 @@ function Product() {
               <li key={idx}>
                 {product.name} - {product.price}원 × {product.quantity}개
                 <ul>
-                  {Object.entries(product.optionGroups || {}).map(
-                    ([groupId, optionArr]) => {
-                      if (!Array.isArray(optionArr) || optionArr.length < 3)
-                        return null;
-
-                      const [, optionName, optionPrice] = optionArr;
-
-                      return (
-                        <li key={groupId}>
-                          옵션명: {optionName}
-                          옵션 가격:{' '}
-                          {optionPrice > 0 ? `+${optionPrice}원` : '무료'}
-                        </li>
-                      );
-                    },
+                  {Object.entries(product.optionGroups).map(
+                    ([groupId, option]) => (
+                      <li key={groupId}>
+                        옵션명: {option.name} <br />
+                        옵션 가격:{' '}
+                        {option.price > 0 ? `+${option.price}원` : '무료'}
+                      </li>
+                    ),
                   )}
                   총 가격 : {product.resultPrice}
                 </ul>
