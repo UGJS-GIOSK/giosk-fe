@@ -33,7 +33,7 @@ function Product() {
 
   // 상품 아이디 가져오기
   useEffect(() => {
-    axios.get('http://localhost:8080/products').then(res => {
+    axios.get('http://localhost:8080/api/v1/products').then(res => {
       const allProducts = res.data.data.content;
       console.log(allProducts);
       const ids = allProducts.map(p => p.product_id);
@@ -53,16 +53,22 @@ function Product() {
   };
 
   const getProductById = () => {
-    axios.get(`http://localhost:8080/products/${productId}`).then(res => {
-      setProduct(res.data.data);
-      setSelectedOptions({});
-    });
+    axios
+      .get(`http://localhost:8080/api/v1/products/${productId}`)
+      .then(res => {
+        setProduct(res.data.data);
+        setSelectedOptions({});
+      });
   };
 
   const handleOptionChange = (groupId, option) => {
     setSelectedOptions(prev => ({
       ...prev,
-      [groupId]: [option.option_id, option.option_name, option.option_price],
+      [groupId]: {
+        id: option.option_id,
+        name: option.option_name,
+        price: option.option_price,
+      },
     }));
   };
 
@@ -169,14 +175,21 @@ function Product() {
               <li key={idx}>
                 {product.name} - {product.price}원 × {product.quantity}개
                 <ul>
-                  {Object.entries(product.optionGroups).map(
-                    ([groupId, [, optionName, optionPrice]]) => (
-                      <li key={groupId}>
-                        옵션명: {optionName} <br />
-                        옵션 가격:{' '}
-                        {optionPrice > 0 ? `+${optionPrice}원` : '무료'}
-                      </li>
-                    ),
+                  {Object.entries(product.optionGroups || {}).map(
+                    ([groupId, optionArr]) => {
+                      if (!Array.isArray(optionArr) || optionArr.length < 3)
+                        return null;
+
+                      const [, optionName, optionPrice] = optionArr;
+
+                      return (
+                        <li key={groupId}>
+                          옵션명: {optionName}
+                          옵션 가격:{' '}
+                          {optionPrice > 0 ? `+${optionPrice}원` : '무료'}
+                        </li>
+                      );
+                    },
                   )}
                   총 가격 : {product.resultPrice}
                 </ul>

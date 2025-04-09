@@ -8,7 +8,10 @@ export default function cartReducer(cart, action) {
 
       // 옵션 가격 총합 계산
       const totalOptionPrice = Object.values(product.optionGroups || {}).reduce(
-        (sum, [, , optionPrice]) => sum + (optionPrice || 0),
+        (sum, option) => {
+          if (!option || typeof option !== 'object') return sum;
+          return sum + (option.price || 0);
+        },
         0,
       );
 

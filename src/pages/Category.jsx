@@ -6,7 +6,7 @@ function Category() {
   const [categories, setCategories] = useState([]);
 
   const getAllCategories = () => {
-    axios.get('http://localhost:8080/categories').then(res => {
+    axios.get('http://localhost:8080/api/v1/categories').then(res => {
       console.log(res.data);
       setCategories(res.data.data.content);
     });

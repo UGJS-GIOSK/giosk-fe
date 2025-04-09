@@ -23,7 +23,7 @@ export default function SuccessPage() {
 
     // 백엔드로 POST 요청
     axios
-      .post('http://localhost:8080/payment/success', payload)
+      .post('http://localhost:8080/api/v1/payments/success', payload)
       .then(() => {
         localStorage.removeItem('cart');
         navigate('/payment/complete', {

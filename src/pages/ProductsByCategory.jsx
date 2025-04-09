@@ -7,7 +7,7 @@ function ProductByCategory() {
   const [selected, setSelected] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:8080/categories').then(res => {
+    axios.get('http://localhost:8080/api/v1/categories').then(res => {
       const categoryList = res.data.data.content;
       setCategories(categoryList);
       setSelected(categoryList[0]);
@@ -16,7 +16,9 @@ function ProductByCategory() {
 
   const getProductsByCategory = () => {
     axios
-      .get(`http://localhost:8080/products/category?category=${selected}`)
+      .get(
+        `http://localhost:8080/api/v1/products/category?category=${selected}`,
+      )
       .then(res => {
         setProduct(res.data.data.content);
       });
