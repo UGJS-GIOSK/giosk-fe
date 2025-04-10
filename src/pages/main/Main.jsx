@@ -105,28 +105,35 @@ export default function Main() {
         )}
       </div>
 
-      <div className="h-[33vh] bg-white shadow-inner border-t px-4 py-3 overflow-y-auto">
-        <h3 className="text-lg font-bold mb-2">🛒 장바구니</h3>
+      <div className="h-[33vh] bg-white shadow-inner border-t border-[#d5cfc2] px-4 py-4 overflow-y-auto rounded-t-2xl font-['Pretendard']">
+        <h3 className="text-3xl font-bold mb-4 text-[#165a4a] flex items-center gap-2">
+          담은 상품
+        </h3>
+
         {cart.length === 0 ? (
-          <p className="text-gray-600">담은 상품이 없습니다.</p>
+          <p className="text-[#165a4a]/70 text-lg">담은 상품이 없습니다.</p>
         ) : (
-          <ul className="text-sm space-y-2">
+          <ul className="text-base space-y-4">
             {cart.map((item, idx) => (
               <li
                 key={idx}
-                className="flex justify-between items-center border-b pb-2"
+                className="flex justify-between items-center border-b border-[#d5cfc2] pb-3"
               >
                 <div>
-                  <p className="font-semibold">{item.name}</p>
+                  <p className="text-xl font-semibold text-gray-700">
+                    {item.name}
+                  </p>
+
                   {Object.values(item.optionGroups).map((opt, i) => (
-                    <p key={i} className="text-gray-500 text-xs">
+                    <p key={i} className="text-base text-gray-500">
                       - {opt.name} ({opt.price > 0 ? `+${opt.price}원` : '무료'}
                       )
                     </p>
                   ))}
                 </div>
+
                 <div className="flex flex-col items-end">
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex items-center gap-2 mb-2">
                     <button
                       onClick={() =>
                         setCart(prev =>
@@ -137,11 +144,11 @@ export default function Main() {
                           ),
                         )
                       }
-                      className="px-2 py-1 bg-gray-200 rounded"
+                      className="w-6 h-6 text-base font-bold bg-[#165a4a] text-white rounded-full flex items-center justify-center hover:bg-[#104036] transition"
                     >
                       -
                     </button>
-                    <span className="min-w-[20px] text-center">
+                    <span className="min-w-[24px] text-center text-xl font-bold text-gray-800">
                       {item.quantity}
                     </span>
                     <button
@@ -152,7 +159,7 @@ export default function Main() {
                           ),
                         )
                       }
-                      className="px-2 py-1 bg-gray-200 rounded"
+                      className="w-6 h-6 text-base font-bold bg-[#165a4a] text-white rounded-full flex items-center justify-center hover:bg-[#104036] transition"
                     >
                       +
                     </button>
@@ -160,12 +167,12 @@ export default function Main() {
                       onClick={() =>
                         setCart(prev => prev.filter((_, i) => i !== idx))
                       }
-                      className="text-red-500 text-xs hover:underline ml-2"
+                      className="text-[#ba1b1d] text-xs font-medium hover:underline ml-1"
                     >
                       삭제
                     </button>
                   </div>
-                  <p className="font-bold">
+                  <p className="text-xl font-bold text-gray-800">
                     {(item.totalPrice * item.quantity).toLocaleString()}원
                   </p>
                 </div>
@@ -174,31 +181,28 @@ export default function Main() {
           </ul>
         )}
 
-        <div className="mt-3 flex justify-between items-center">
-          <span className="font-bold text-lg">
-            총:{' '}
-            {cart
-              .reduce((sum, item) => sum + item.totalPrice * item.quantity, 0)
-              .toLocaleString()}
-            원
+        {/* 아래 총액 영역은 선 없애기 */}
+        <div className="mt-5 flex justify-between items-center pt-3">
+          <span className="font-bold text-3xl text-[#165a4a]">
+            총: {totalAmount.toLocaleString()}원
           </span>
           <button
             disabled={cart.length === 0}
             onClick={() => setShowTakeoutModal(true)}
-            className={`px-4 py-2 rounded-xl font-bold transition ${
+            className={`px-6 py-2 rounded-xl font-bold transition text-white text-lg shadow ${
               cart.length === 0
-                ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                : 'bg-yellow-500 text-white hover:bg-yellow-600'
+                ? 'bg-gray-300 cursor-not-allowed shadow-none'
+                : 'bg-[#165a4a] hover:bg-[#104036]'
             }`}
           >
-            {cart.length === 0 ? '선택한 상품 없음' : '결제하기'}
+            결제하기
           </button>
         </div>
       </div>
 
       {showTakeoutModal && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-sm text-center">
+          <div className="bg-[#f0eade] p-6 rounded-lg shadow-lg w-[90%] max-w-sm text-center">
             <h2 className="text-lg font-bold mb-4">포장하시겠습니까?</h2>
             <div className="flex justify-around">
               <button
@@ -228,7 +232,7 @@ export default function Main() {
 
       {showRewardModal && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-sm text-center">
+          <div className="bg-[#f0eade] p-6 rounded-lg shadow-lg w-[90%] max-w-sm text-center">
             <h2 className="text-lg font-bold mb-4">적립 여부를 선택해주세요</h2>
             <div className="flex justify-around">
               {/* ✅ 적립하기 */}
