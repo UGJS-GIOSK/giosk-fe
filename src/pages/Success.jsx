@@ -17,9 +17,9 @@ export default function SuccessPage() {
     const userIdRaw = localStorage.getItem('userId');
     const userId =
       userIdRaw === 'null' || userIdRaw === 'undefined' ? null : userIdRaw;
-    const takeout = localStorage.getItem('isTakeout') === 'true';
-    const coupon = localStorage.getItem('useCoupon') === 'true';
-    const stamp = localStorage.getItem('reward') === 'true';
+    const takeout = localStorage.getItem('takeout') === 'true';
+    const coupon = localStorage.getItem('coupon') === 'true';
+    const stamp = localStorage.getItem('stamp') === 'true';
 
     const payload = {
       paymentType,
@@ -46,9 +46,9 @@ export default function SuccessPage() {
         localStorage.removeItem('cart');
         localStorage.removeItem('userId');
         localStorage.removeItem('phoneNumber');
-        localStorage.removeItem('isTakeout');
-        localStorage.removeItem('useCoupon');
-        localStorage.removeItem('reward');
+        localStorage.removeItem('takeout');
+        localStorage.removeItem('coupon');
+        localStorage.removeItem('stamp');
 
         // 완료 페이지 이동
         navigate('/payment/complete', {

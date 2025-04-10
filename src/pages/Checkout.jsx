@@ -15,15 +15,18 @@ export default function Checkout() {
     cart = [],
     userId,
     phoneNumber,
-    isTakeout,
-    useCoupon,
-    reward,
+    takeout,
+    coupon,
+    stamp,
   } = location.state || {};
 
-  const totalPrice = cart.reduce(
+  // 💰 쿠폰 사용 시 2000원 할인
+  const rawPrice = cart.reduce(
     (sum, item) => sum + item.totalPrice * item.quantity,
     0,
   );
+  const discount = coupon ? 2000 : 0;
+  const totalPrice = Math.max(rawPrice - discount, 0);
 
   // Toss 위젯 불러오기
   useEffect(() => {
@@ -36,32 +39,32 @@ export default function Checkout() {
       paymentWidgetRef.current = paymentWidget;
     })();
   }, [totalPrice]);
-  localStorage.setItem('userId', userId ?? null);
 
   const handlePayment = async () => {
     const orderId = nanoid();
 
-    // ✅ 여기 추가!
+    // ✅ localStorage 저장
     localStorage.setItem('cart', JSON.stringify(cart));
     localStorage.setItem('userId', userId ?? null);
     localStorage.setItem('phoneNumber', phoneNumber);
-    localStorage.setItem('isTakeout', isTakeout);
-    localStorage.setItem('useCoupon', useCoupon);
-    localStorage.setItem('reward', reward);
-    localStorage.setItem('userId', userId ?? null);
+    localStorage.setItem('takeout', takeout);
+    localStorage.setItem('coupon', coupon);
+    localStorage.setItem('stamp', stamp);
 
-    // 1️⃣ 콘솔 출력
+    // ✅ 로그 출력
     console.log('💳 결제 요청 정보');
     console.log('🧾 주문번호(orderId):', orderId);
     console.log('🧑 사용자 ID:', userId);
     console.log('📞 전화번호:', phoneNumber);
-    console.log('📦 포장 여부:', isTakeout);
-    console.log('🎁 적립 여부:', reward);
-    console.log('🏷️ 쿠폰 사용 여부:', useCoupon);
+    console.log('📦 포장 여부:', takeout);
+    console.log('🎁 적립 여부:', stamp);
+    console.log('🏷️ 쿠폰 사용 여부:', coupon);
     console.log('🛒 장바구니:', cart);
-    console.log('💰 결제 금액:', totalPrice);
+    console.log('💰 총 금액:', rawPrice);
+    console.log('➖ 할인:', discount);
+    console.log('✅ 최종 결제 금액:', totalPrice);
 
-    // 2️⃣ 백엔드에 결제 금액만 임시 저장
+    // ✅ 백엔드 임시 저장
     try {
       await axios.post(
         'http://localhost:8080/api/v1/payments/temp',
@@ -73,7 +76,7 @@ export default function Checkout() {
       console.error('❌ 임시 저장 실패:', err);
     }
 
-    // 3️⃣ Toss 결제 요청
+    // ✅ 결제 위젯 실행
     try {
       await paymentWidgetRef.current?.requestPayment({
         orderId,
@@ -94,6 +97,14 @@ export default function Checkout() {
   return (
     <div className="min-h-screen bg-[#f3efe5] flex flex-col items-center px-4 py-10">
       <h1 className="text-3xl font-bold mb-6">🧾 주문서</h1>
+
+      <div className="text-sm mb-2 text-gray-600">
+        {coupon && <p>💸 쿠폰 할인 적용: -2,000원</p>}
+      </div>
+
+      <div className="text-xl font-bold mb-4">
+        총 결제 금액: {totalPrice.toLocaleString()}원
+      </div>
 
       <div id="payment-widget" className="w-full max-w-md mb-6" />
 

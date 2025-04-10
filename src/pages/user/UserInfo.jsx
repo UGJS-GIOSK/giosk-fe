@@ -18,22 +18,19 @@ export default function UserInfo() {
       )
       .then(res => {
         setUser(res.data.data);
-        if (res.data.data.coupon > 0) {
-          setShowCouponModal(true);
-        }
       })
       .catch(err => console.error('사용자 정보 불러오기 실패', err));
   }, [phoneNumber]);
 
   const proceedToCheckout = (useCoupon = false) => {
-    const reward = true; // ✅ 이 페이지에 왔다는 건 적립하겠다고 한 상태니까
+    const reward = useCoupon === true ? false : true;
 
     console.log('📦 결제 정보 전송');
     console.log('🧑 userId:', user.memberId);
     console.log('📞 phoneNumber:', phoneNumber);
     console.log('🛍️ 포장 여부 (isTakeout):', isTakeout);
-    console.log('🎁 적립 여부 (reward):', reward);
-    console.log('🏷️ 쿠폰 사용 여부 (useCoupon):', useCoupon);
+    console.log('🎁 적립 여부 (stamp):', reward);
+    console.log('🏷️ 쿠폰 사용 여부 (coupon):', useCoupon);
     console.log('🛒 장바구니(cart):', cart);
 
     navigate('/checkout', {
@@ -41,9 +38,9 @@ export default function UserInfo() {
         cart,
         phoneNumber,
         userId: user.memberId,
-        useCoupon,
-        isTakeout,
-        reward,
+        coupon: useCoupon,
+        takeout: isTakeout,
+        stamp: reward,
       },
     });
   };
@@ -53,7 +50,6 @@ export default function UserInfo() {
   return (
     <div className="min-h-screen bg-[#f3efe5] flex flex-col items-center justify-center px-4 py-10 relative">
       <h2 className="text-2xl font-bold mb-6">👤 사용자 정보</h2>
-
       <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md space-y-3">
         <p>
           <strong>ID:</strong> {user.memberId}
@@ -69,11 +65,16 @@ export default function UserInfo() {
         </p>
       </div>
 
-      {/* ✅ 결제 계속 & 취소 버튼 정렬 */}
       <div className="mt-8 flex justify-center gap-4">
         <button
           className="bg-green-700 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-800"
-          onClick={() => proceedToCheckout(false)}
+          onClick={() => {
+            if (user.coupon > 0) {
+              setShowCouponModal(true);
+            } else {
+              proceedToCheckout(false);
+            }
+          }}
         >
           결제하기
         </button>
@@ -85,6 +86,34 @@ export default function UserInfo() {
           취소하기
         </button>
       </div>
+
+      {showCouponModal && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-xl shadow-lg w-[90%] max-w-sm text-center">
+            <h2 className="text-lg font-bold mb-4">쿠폰을 사용하시겠습니까?</h2>
+            <div className="flex justify-around">
+              <button
+                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                onClick={() => {
+                  setShowCouponModal(false);
+                  proceedToCheckout(true); // ✅ 쿠폰 사용
+                }}
+              >
+                예
+              </button>
+              <button
+                className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+                onClick={() => {
+                  setShowCouponModal(false);
+                  proceedToCheckout(false); // ✅ 쿠폰 미사용
+                }}
+              >
+                아니요
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
