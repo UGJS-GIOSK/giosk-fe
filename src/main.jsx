@@ -11,6 +11,8 @@ import App from './App.jsx';
 import FirstScreen from './pages/FirstScreen.jsx';
 import './index.css';
 import Main from './pages/main/Main.jsx';
+import PhoneInput from './pages/user/PhoneInput.jsx';
+import UserInfo from './pages/user/UserInfo.jsx';
 const router = createBrowserRouter([
   {
     // 카테고리 밑에 카테고리 상품들 그리고 장바구니 이렇게 세개 뿌리고 나머지는 독립된 페이지로
@@ -63,6 +65,15 @@ const router = createBrowserRouter([
   {
     path: '/payment/complete',
     element: <CompletePage />,
+  },
+
+  {
+    path: '/phone',
+    element: <PhoneInput />,
+  },
+  {
+    path: '/userinfo',
+    element: <UserInfo />,
   },
 ]);
 
