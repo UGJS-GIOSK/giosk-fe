@@ -23,8 +23,11 @@ export default function SuccessPage() {
 
     // 백엔드로 POST 요청
     axios
-      .post('http://localhost:8080/api/v1/payments/success', payload)
-      .then(() => {
+      .post('http://localhost:8080/api/v1/payments/confirm', payload, {
+        withCredentials: true,
+      })
+      .then(res => {
+        console.log('res : ', res);
         localStorage.removeItem('cart');
         navigate('/payment/complete', {
           state: { orderId, amount },

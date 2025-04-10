@@ -42,7 +42,9 @@ export default function Checkout() {
     };
 
     axios
-      .post('http://localhost:8080/payment/temp', prevCheckoutInfo)
+      .post('http://localhost:8080/api/v1/payments/temp', prevCheckoutInfo, {
+        withCredentials: true,
+      })
       .then(res => {
         console.log('서버 응답:', res.data);
       })
