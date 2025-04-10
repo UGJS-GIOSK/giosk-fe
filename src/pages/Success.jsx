@@ -4,7 +4,6 @@ import axios from 'axios';
 
 export default function SuccessPage() {
   const [searchParams] = useSearchParams();
-  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,32 +12,55 @@ export default function SuccessPage() {
     const paymentKey = searchParams.get('paymentKey');
     const amount = searchParams.get('amount');
 
+    // localStorage에서 데이터 가져오기
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const userIdRaw = localStorage.getItem('userId');
+    const userId =
+      userIdRaw === 'null' || userIdRaw === 'undefined' ? null : userIdRaw;
+    const takeout = localStorage.getItem('isTakeout') === 'true';
+    const coupon = localStorage.getItem('useCoupon') === 'true';
+    const stamp = localStorage.getItem('reward') === 'true';
+
     const payload = {
       paymentType,
       orderId,
       paymentKey,
-      amount,
+      amount: Number(amount),
+      memberId: userId,
+      takeout,
+      coupon,
+      stamp,
       cart,
     };
 
-    // 백엔드로 POST 요청
+    console.log('✅ 결제 성공. 백엔드로 전송할 payload:', payload);
+
     axios
       .post('http://localhost:8080/api/v1/payments/confirm', payload, {
         withCredentials: true,
       })
       .then(res => {
-        console.log('res : ', res);
+        console.log('✅ 결제 정보 저장 성공:', res.data);
+
+        // 모든 임시 저장 데이터 삭제
         localStorage.removeItem('cart');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('phoneNumber');
+        localStorage.removeItem('isTakeout');
+        localStorage.removeItem('useCoupon');
+        localStorage.removeItem('reward');
+
+        // 완료 페이지 이동
         navigate('/payment/complete', {
           state: { orderId, amount },
-          replace: true, // 히스토리에 남기지 않음 (뒤로가기 시 /success 못 감)
+          replace: true,
         });
       })
       .catch(err => {
-        console.error('서버 에러:', err);
-        navigate('/fail'); // 실패시 페이지
+        console.error('❌ 결제 저장 실패:', err);
+        navigate('/fail');
       });
-  }, [searchParams, navigate, cart]);
+  }, [searchParams, navigate]);
 
-  return <p>결제 처리 중입니다...</p>;
+  return <p className="text-center mt-10 text-xl">결제 처리 중입니다...</p>;
 }

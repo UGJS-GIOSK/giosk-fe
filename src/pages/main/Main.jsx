@@ -231,9 +231,15 @@ export default function Main() {
           <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-sm text-center">
             <h2 className="text-lg font-bold mb-4">적립 여부를 선택해주세요</h2>
             <div className="flex justify-around">
+              {/* ✅ 적립하기 */}
               <button
                 className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
                 onClick={() => {
+                  // ✅ localStorage 저장
+                  localStorage.setItem('cart', JSON.stringify(cart));
+                  localStorage.setItem('isTakeout', isTakeout);
+                  localStorage.setItem('reward', true);
+
                   setShowRewardModal(false);
                   navigate('/phone', {
                     state: { cart, reward: true, isTakeout },
@@ -242,9 +248,19 @@ export default function Main() {
               >
                 예
               </button>
+
+              {/* ✅ 적립 안함 */}
               <button
                 className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
                 onClick={() => {
+                  // ✅ localStorage 저장
+                  localStorage.setItem('cart', JSON.stringify(cart));
+                  localStorage.setItem('userId', null);
+                  localStorage.setItem('phoneNumber', null);
+                  localStorage.setItem('isTakeout', isTakeout);
+                  localStorage.setItem('useCoupon', false);
+                  localStorage.setItem('reward', false);
+
                   setShowRewardModal(false);
                   navigate('/checkout', {
                     state: { cart, reward: false, isTakeout },
