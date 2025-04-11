@@ -96,7 +96,7 @@ export default function Checkout() {
 
   return (
     <div className="min-h-screen bg-[#f3efe5] flex flex-col items-center px-4 py-10">
-      <h1 className="text-3xl font-bold mb-6">🧾 주문서</h1>
+      <h1 className="text-3xl font-bold mb-6"> 주문서</h1>
 
       <div className="text-sm mb-2 text-gray-600">
         {coupon && <p>💸 쿠폰 할인 적용: -2,000원</p>}
@@ -110,7 +110,7 @@ export default function Checkout() {
 
       <button
         onClick={handlePayment}
-        className="w-full max-w-md py-4 text-xl font-bold bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 transition"
+        className="w-full max-w-md py-4 text-xl font-bold bg-[#165a4a] text-white rounded-xl hover:bg-[#104036] transition"
       >
         결제하기
       </button>

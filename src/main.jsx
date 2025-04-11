@@ -3,16 +3,19 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Category from './pages/Category';
 import ProductByCategory from './pages/ProductsByCategory';
 import Product from './pages/Product';
-import Checkkout from './pages/Checkout.jsx';
-import Success from './pages/Success.jsx';
-import Fail from './pages/Fail.jsx';
-import CompletePage from './pages/Complete.jsx';
+import Checkkout from './pages/payment/Checkout.jsx';
+import Success from './pages/payment/Success.jsx';
+import Fail from './pages/payment/Fail.jsx';
+import CompletePage from './pages/payment/Complete.jsx';
 import App from './App.jsx';
-import FirstScreen from './pages/FirstScreen.jsx';
+import FirstScreen from './pages/main/FirstScreen.jsx';
 import './index.css';
 import Main from './pages/main/Main.jsx';
 import PhoneInput from './pages/user/PhoneInput.jsx';
 import UserInfo from './pages/user/UserInfo.jsx';
+import Admin from './pages/admin/Admin.jsx';
+import { FaI } from 'react-icons/fa6';
+import AdminProducts from './pages/admin/AdminProducts.jsx';
 const router = createBrowserRouter([
   {
     // 카테고리 밑에 카테고리 상품들 그리고 장바구니 이렇게 세개 뿌리고 나머지는 독립된 페이지로
@@ -40,7 +43,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/firstscreen',
+    path: '/firstScreen',
     element: <FirstScreen />,
   },
 
@@ -60,7 +63,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/fail',
-    element: <Fail />,
+    element: <FaI />,
   },
   {
     path: '/payment/complete',
@@ -74,6 +77,14 @@ const router = createBrowserRouter([
   {
     path: '/userinfo',
     element: <UserInfo />,
+  },
+  {
+    path: '/admin',
+    element: <Admin />,
+  },
+  {
+    path: '/admin/products',
+    element: <AdminProducts />,
   },
 ]);
 

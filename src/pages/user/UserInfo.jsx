@@ -49,14 +49,8 @@ export default function UserInfo() {
 
   return (
     <div className="min-h-screen bg-[#f3efe5] flex flex-col items-center justify-center px-4 py-10 relative">
-      <h2 className="text-2xl font-bold mb-6">👤 사용자 정보</h2>
+      <h2 className="text-2xl font-bold mb-6">회원 정보</h2>
       <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md space-y-3">
-        <p>
-          <strong>ID:</strong> {user.memberId}
-        </p>
-        <p>
-          <strong>전화번호:</strong> {user.phoneNumber}
-        </p>
         <p>
           <strong>스탬프 수:</strong> {user.stamp}개
         </p>
@@ -64,10 +58,9 @@ export default function UserInfo() {
           <strong>쿠폰 수:</strong> {user.coupon}장
         </p>
       </div>
-
       <div className="mt-8 flex justify-center gap-4">
         <button
-          className="bg-green-700 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-800"
+          className="bg-[#165a4a] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#104036] transition"
           onClick={() => {
             if (user.coupon > 0) {
               setShowCouponModal(true);
@@ -80,7 +73,7 @@ export default function UserInfo() {
         </button>
 
         <button
-          className="bg-gray-400 text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-500"
+          className="bg-gray-400 text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-500 transition"
           onClick={() => navigate('/main')}
         >
           취소하기

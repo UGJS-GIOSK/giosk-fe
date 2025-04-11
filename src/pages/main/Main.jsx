@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
-import ProductDetail from '../\bproduct/ProductDetail';
+import ProductDetail from '../product/ProductDetail';
 import ProductGrid from './ProductGrid';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -144,11 +144,11 @@ export default function Main() {
                           ),
                         )
                       }
-                      className="w-6 h-6 text-base font-bold bg-[#165a4a] text-white rounded-full flex items-center justify-center hover:bg-[#104036] transition"
+                      className="w-8 h-8 text-lg font-bold bg-[#165a4a] text-white rounded-full flex items-center justify-center hover:bg-[#104036] transition"
                     >
-                      -
+                      −
                     </button>
-                    <span className="min-w-[24px] text-center text-xl font-bold text-gray-800">
+                    <span className="min-w-[30px] text-center text-xl font-semibold text-[#165a4a]">
                       {item.quantity}
                     </span>
                     <button
@@ -159,7 +159,7 @@ export default function Main() {
                           ),
                         )
                       }
-                      className="w-6 h-6 text-base font-bold bg-[#165a4a] text-white rounded-full flex items-center justify-center hover:bg-[#104036] transition"
+                      className="w-8 h-8 text-lg font-bold bg-[#165a4a] text-white rounded-full flex items-center justify-center hover:bg-[#104036] transition"
                     >
                       +
                     </button>
@@ -167,7 +167,7 @@ export default function Main() {
                       onClick={() =>
                         setCart(prev => prev.filter((_, i) => i !== idx))
                       }
-                      className="text-[#ba1b1d] text-xs font-medium hover:underline ml-1"
+                      className="text-[#ba1b1d] text-sm font-semibold hover:underline ml-1"
                     >
                       삭제
                     </button>
@@ -203,24 +203,26 @@ export default function Main() {
       {showTakeoutModal && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-[#f0eade] p-6 rounded-lg shadow-lg w-[90%] max-w-sm text-center">
-            <h2 className="text-lg font-bold mb-4">포장하시겠습니까?</h2>
+            <h2 className="text-lg font-bold mb-4 text-[#333]">
+              포장하시겠습니까?
+            </h2>
             <div className="flex justify-around">
               <button
-                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                className="px-4 py-2 bg-[#165a4a] text-white rounded hover:bg-[#104036]"
                 onClick={() => {
                   setIsTakeout(true);
                   setShowTakeoutModal(false);
-                  setShowRewardModal(true); // 다음 단계: 적립 여부
+                  setShowRewardModal(true);
                 }}
               >
                 예
               </button>
               <button
-                className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+                className="px-4 py-2 bg-[#d5cfc2] text-[#333] rounded hover:bg-[#c6beb1]"
                 onClick={() => {
                   setIsTakeout(false);
                   setShowTakeoutModal(false);
-                  setShowRewardModal(true); // 다음 단계
+                  setShowRewardModal(true);
                 }}
               >
                 아니요
@@ -233,13 +235,13 @@ export default function Main() {
       {showRewardModal && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-[#f0eade] p-6 rounded-lg shadow-lg w-[90%] max-w-sm text-center">
-            <h2 className="text-lg font-bold mb-4">적립 여부를 선택해주세요</h2>
+            <h2 className="text-lg font-bold mb-4 text-[#333]">
+              적립 여부를 선택해주세요
+            </h2>
             <div className="flex justify-around">
-              {/* ✅ 적립하기 */}
               <button
-                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                className="px-4 py-2 bg-[#165a4a] text-white rounded hover:bg-[#104036]"
                 onClick={() => {
-                  // ✅ localStorage 저장
                   localStorage.setItem('cart', JSON.stringify(cart));
                   localStorage.setItem('isTakeout', isTakeout);
                   localStorage.setItem('reward', true);
@@ -252,12 +254,9 @@ export default function Main() {
               >
                 예
               </button>
-
-              {/* ✅ 적립 안함 */}
               <button
-                className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+                className="px-4 py-2 bg-[#d5cfc2] text-[#333] rounded hover:bg-[#c6beb1]"
                 onClick={() => {
-                  // ✅ localStorage 저장
                   localStorage.setItem('cart', JSON.stringify(cart));
                   localStorage.setItem('userId', null);
                   localStorage.setItem('phoneNumber', null);

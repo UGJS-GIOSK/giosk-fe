@@ -24,14 +24,13 @@ export default function PhoneInput() {
       state: {
         cart,
         phoneNumber: phoneNumber,
-        isTakeout, // ✅ 반드시 넘겨줘야 해
-        reward, // ✅ 적립 여부도
+        isTakeout,
+        reward,
       },
     });
   };
 
   const handleBack = () => {
-    // 장바구니 비우면서 메인 페이지로 이동
     navigate('/main', { state: { cart: [...cart] } });
   };
 
@@ -42,11 +41,11 @@ export default function PhoneInput() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3efe5] flex flex-col items-center justify-center px-4 py-8 relative">
-      {/* 뒤로가기 버튼 */}
+    <div className="min-h-screen bg-[#f3efe5] flex flex-col items-center justify-center px-4 py-8 relative text-black">
+      {/* 뒤로가기 */}
       <button
         onClick={handleBack}
-        className="absolute top-4 left-4 text-gray-600 text-lg font-bold"
+        className="absolute top-4 left-4 text-lg font-bold"
       >
         ◀ 뒤로가기
       </button>
@@ -71,7 +70,7 @@ export default function PhoneInput() {
             }
             className={`w-20 h-20 rounded-full text-2xl font-semibold shadow ${
               val
-                ? 'bg-white hover:bg-gray-100 active:scale-95'
+                ? 'bg-white hover:bg-gray-100 active:scale-95 text-black'
                 : 'bg-transparent pointer-events-none'
             }`}
           >
@@ -85,7 +84,7 @@ export default function PhoneInput() {
         disabled={digits.length !== 8}
         className={`w-full max-w-xs py-3 rounded-xl font-bold text-lg transition ${
           digits.length === 8
-            ? 'bg-green-700 text-white hover:bg-green-800'
+            ? 'bg-[#165a4a] text-white hover:bg-[#104036]'
             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
         }`}
       >

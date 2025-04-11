@@ -63,7 +63,9 @@ export default function ProductDetail({ productId, onClose, onAddToCart }) {
         />
 
         <p className="text-xl font-semibold mb-2">
-          {product.price.toLocaleString()}원
+          <span className="ml-1 text-xs font-normal text-[#165a4a]/80">
+            {product.price.toLocaleString()}원{' '}
+          </span>
         </p>
 
         <p className="text-gray-700 mb-4">
@@ -84,32 +86,38 @@ export default function ProductDetail({ productId, onClose, onAddToCart }) {
           {product.optionGroupResponses?.map(group => (
             <div key={group.id} className="mb-4">
               <p className="font-medium mb-1">{group.name}</p>
-              <div className="flex flex-wrap gap-3">
-                {group.options?.map(option => (
-                  <label
-                    key={option.option_id}
-                    className="flex items-center gap-1"
-                  >
-                    <input
-                      type="radio"
-                      name={`group-${group.id}`}
-                      onChange={() => handleOptionChange(group.id, option)}
-                    />
-                    {option.option_name}
-                    {option.option_price > 0 && (
-                      <span className="text-sm text-gray-500">
-                        (+{option.option_price.toLocaleString()}원)
-                      </span>
-                    )}
-                  </label>
-                ))}
+              <div className="flex flex-wrap gap-2">
+                {group.options?.map(option => {
+                  const isSelected =
+                    selectedOptions[group.id]?.id === option.option_id;
+                  return (
+                    <label
+                      key={option.option_id}
+                      className={`cursor-pointer px-4 py-2 rounded-xl text-sm font-semibold border transition duration-150
+          ${
+            isSelected
+              ? 'bg-[#165a4a] text-white border-[#165a4a]'
+              : 'bg-white text-[#165a4a] border-[#165a4a]/30 hover:bg-[#f0eade]'
+          }
+        `}
+                      onClick={() => handleOptionChange(group.id, option)}
+                    >
+                      {option.option_name}
+                      {option.option_price > 0 && (
+                        <span className="ml-1 text-xs font-normal">
+                          (+{option.option_price.toLocaleString()}원)
+                        </span>
+                      )}
+                    </label>
+                  );
+                })}
               </div>
             </div>
           ))}
         </div>
 
         {Object.entries(selectedOptions).length > 0 && (
-          <div className="mt-6 border-t pt-4 text-sm text-gray-700">
+          <div className="mt-6 border-t border-[#d5cfc2] pt-4 text-sm text-[#165a4a]">
             <h4 className="font-semibold mb-2">선택된 옵션</h4>
             <ul className="list-disc list-inside">
               {Object.entries(selectedOptions).map(([groupId, option]) => (
@@ -137,7 +145,7 @@ export default function ProductDetail({ productId, onClose, onAddToCart }) {
             Object.keys(selectedOptions).length !==
               product.optionGroupResponses.length
               ? 'bg-gray-400 text-white cursor-not-allowed'
-              : 'bg-green-700 text-white hover:bg-green-800'
+              : 'bg-[#165a4a] text-white hover:bg-[#104036]'
           }`}
         >
           장바구니 담기
