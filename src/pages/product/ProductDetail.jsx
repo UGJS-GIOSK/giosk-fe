@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import ProductIngredient from './ProductIngredient'; // ✅ import
+import ProductIngredient from './ProductIngredient';
 
 export default function ProductDetail({ productId, onClose, onAddToCart }) {
   const [product, setProduct] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState({});
-  const [showIngredients, setShowIngredients] = useState(false); // ✅ 이 줄 추가!!
+  const [showIngredients, setShowIngredients] = useState(false);
 
   useEffect(() => {
     axios
@@ -38,86 +38,89 @@ export default function ProductDetail({ productId, onClose, onAddToCart }) {
       image: product.image,
       optionGroups: selectedOptions,
       quantity: 1,
-      totalPrice: product.price + totalOptionPrice, // ✅ 필수
+      totalPrice: product.price + totalOptionPrice,
     };
-    console.log('🛒 담긴 상품:', selectedProduct);
+
     onAddToCart(selectedProduct);
-    onClose(); // 모달 닫기
+    onClose();
   };
 
   if (!product) return <div>로딩 중...</div>;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white rounded-xl p-6 w-[90%] max-w-xl relative">
-        <button onClick={onClose} className="absolute top-4 right-4 text-2xl">
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center px-4">
+      <div className="bg-white rounded-2xl p-5 w-full max-w-md sm:max-w-lg max-h-[90vh] overflow-y-auto relative">
+        {/* 닫기 버튼 */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-2xl text-gray-500 hover:text-black"
+        >
           ✖
         </button>
 
+        {/* 제목 */}
         <h2 className="text-2xl font-bold mb-2">{product.name}</h2>
 
+        {/* 이미지 */}
         <img
           src={product.image}
           alt={product.name}
-          className="w-full max-h-60 object-contain mb-4"
+          className="w-full h-48 object-contain mb-4"
         />
 
-        <p className="text-xl font-semibold mb-2">
-          <span className="ml-1 text-xs font-normal text-[#165a4a]/80">
-            {product.price.toLocaleString()}원{' '}
-          </span>
+        {/* 가격 */}
+        <p className="text-lg font-semibold text-[#165a4a] mb-2">
+          {product.price.toLocaleString()}원
         </p>
 
+        {/* 설명 */}
         <p className="text-gray-700 mb-4">
           {product.product_detail_info.description}
         </p>
 
-        {/* ✅ 성분 정보 보기 버튼 */}
+        {/* 성분 정보 보기 */}
         <button
           onClick={() => setShowIngredients(true)}
-          className="mb-6 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+          className="mb-6 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm"
         >
           성분 정보 보기
         </button>
 
-        {/* 옵션 */}
-        <div className="mt-4">
-          <h3 className="font-bold mb-2">옵션</h3>
-          {product.optionGroupResponses?.map(group => (
-            <div key={group.id} className="mb-4">
-              <p className="font-medium mb-1">{group.name}</p>
-              <div className="flex flex-wrap gap-2">
-                {group.options?.map(option => {
-                  const isSelected =
-                    selectedOptions[group.id]?.id === option.option_id;
-                  return (
-                    <label
-                      key={option.option_id}
-                      className={`cursor-pointer px-4 py-2 rounded-xl text-sm font-semibold border transition duration-150
-          ${
-            isSelected
-              ? 'bg-[#165a4a] text-white border-[#165a4a]'
-              : 'bg-white text-[#165a4a] border-[#165a4a]/30 hover:bg-[#f0eade]'
-          }
-        `}
-                      onClick={() => handleOptionChange(group.id, option)}
-                    >
-                      {option.option_name}
-                      {option.option_price > 0 && (
-                        <span className="ml-1 text-xs font-normal">
-                          (+{option.option_price.toLocaleString()}원)
-                        </span>
-                      )}
-                    </label>
-                  );
-                })}
-              </div>
+        {/* 옵션 그룹 */}
+        {product.optionGroupResponses?.map(group => (
+          <div key={group.id} className="mb-4">
+            <p className="font-semibold mb-1">{group.name}</p>
+            <div className="flex flex-wrap gap-2">
+              {group.options?.map(option => {
+                const isSelected =
+                  selectedOptions[group.id]?.id === option.option_id;
+                return (
+                  <label
+                    key={option.option_id}
+                    onClick={() => handleOptionChange(group.id, option)}
+                    className={`cursor-pointer px-4 py-2 rounded-xl text-sm font-semibold border transition
+                    ${
+                      isSelected
+                        ? 'bg-[#165a4a] text-white border-[#165a4a]'
+                        : 'bg-white text-[#165a4a] border-[#165a4a]/30 hover:bg-[#f0eade]'
+                    }`}
+                  >
+                    {option.option_name}
+                    {option.option_price > 0 && (
+                      <span className="ml-1 text-xs font-normal">
+                        (+{option.option_price.toLocaleString()}원)
+                      </span>
+                    )}
+                  </label>
+                );
+              })}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
 
+        {/* 선택된 옵션 */}
         {Object.entries(selectedOptions).length > 0 && (
-          <div className="mt-6 border-t border-[#d5cfc2] pt-4 text-sm text-[#165a4a]">
+          <div className="mt-4 border-t border-[#d5cfc2] pt-4 text-sm text-[#165a4a]">
             <h4 className="font-semibold mb-2">선택된 옵션</h4>
             <ul className="list-disc list-inside">
               {Object.entries(selectedOptions).map(([groupId, option]) => (
@@ -133,6 +136,7 @@ export default function ProductDetail({ productId, onClose, onAddToCart }) {
           </div>
         )}
 
+        {/* 장바구니 담기 버튼 */}
         <button
           onClick={handleAddToCart}
           disabled={
@@ -152,7 +156,7 @@ export default function ProductDetail({ productId, onClose, onAddToCart }) {
         </button>
       </div>
 
-      {/* ✅ 성분 모달 */}
+      {/* 성분 정보 모달 */}
       {showIngredients && (
         <ProductIngredient
           detailInfo={product.product_detail_info}
