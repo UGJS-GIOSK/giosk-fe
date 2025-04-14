@@ -17,6 +17,7 @@ export default function Main() {
   const [showRewardModal, setShowRewardModal] = useState(false);
   const [showTakeoutModal, setShowTakeoutModal] = useState(false);
   const [isTakeout, setIsTakeout] = useState(false);
+  const [showAutoHomeModal, setShowAutoHomeModal] = useState(false);
 
   const fetchCategories = async () => {
     try {
@@ -34,6 +35,37 @@ export default function Main() {
       console.error('카테고리 불러오기 실패', err);
     }
   };
+
+  useEffect(() => {
+    let modalTimer;
+    let redirectTimer;
+
+    const resetTimers = () => {
+      clearTimeout(modalTimer);
+      clearTimeout(redirectTimer);
+
+      setShowAutoHomeModal(false); // 모달 숨김
+
+      modalTimer = setTimeout(() => {
+        setShowAutoHomeModal(true); // 3초 뒤 모달 표시
+      }, 17000);
+
+      redirectTimer = setTimeout(() => {
+        navigate('/firstScreen'); // 10초 뒤 이동
+      }, 20000);
+    };
+
+    const events = ['mousemove', 'mousedown', 'keydown', 'touchstart'];
+
+    events.forEach(event => window.addEventListener(event, resetTimers));
+    resetTimers();
+
+    return () => {
+      clearTimeout(modalTimer);
+      clearTimeout(redirectTimer);
+      events.forEach(event => window.removeEventListener(event, resetTimers));
+    };
+  }, []);
 
   useEffect(() => {
     fetchCategories();
@@ -276,6 +308,18 @@ export default function Main() {
                 아니요
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showAutoHomeModal && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white rounded-xl shadow-xl p-6 w-[80%] max-w-sm text-center">
+            <p className="text-lg font-semibold text-gray-800">
+              사용자의 입력이 없어{' '}
+              <span className="text-[#165a4a] font-bold">홈 화면</span>으로
+              이동합니다.
+            </p>
           </div>
         </div>
       )}

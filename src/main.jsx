@@ -5,7 +5,6 @@ import ProductByCategory from './pages/ProductsByCategory';
 import Product from './pages/Product';
 import Checkkout from './pages/payment/Checkout.jsx';
 import Success from './pages/payment/Success.jsx';
-import Fail from './pages/payment/Fail.jsx';
 import CompletePage from './pages/payment/Complete.jsx';
 import App from './App.jsx';
 import FirstScreen from './pages/main/FirstScreen.jsx';
@@ -16,6 +15,7 @@ import UserInfo from './pages/user/UserInfo.jsx';
 import Admin from './pages/admin/Admin.jsx';
 import { FaI } from 'react-icons/fa6';
 import AdminProducts from './pages/admin/AdminProducts.jsx';
+import AdminOrders from './pages/admin/AdminOrders.jsx';
 const router = createBrowserRouter([
   {
     // 카테고리 밑에 카테고리 상품들 그리고 장바구니 이렇게 세개 뿌리고 나머지는 독립된 페이지로
@@ -85,6 +85,10 @@ const router = createBrowserRouter([
   {
     path: '/admin/products',
     element: <AdminProducts />,
+  },
+  {
+    path: '/admin/orders',
+    element: <AdminOrders />,
   },
 ]);
 

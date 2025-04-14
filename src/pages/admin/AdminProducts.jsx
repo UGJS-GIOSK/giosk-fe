@@ -40,14 +40,19 @@ export default function AdminProductList() {
 
   const toggleStatus = async productId => {
     try {
-      await axios.patch(
-        `http://localhost:8080/api/v1/products/${productId}/status`,
-        {},
-        { withCredentials: true },
-      );
+      const url = `http://localhost:8080/api/v1/products/${productId}/status`;
+      console.log('📡 상태 변경 요청:', {
+        method: 'PATCH',
+        url,
+        data: {},
+        config: { withCredentials: true },
+      });
+
+      await axios.patch(url, {}, { withCredentials: true });
+
       fetchProducts(selectedCategory);
     } catch (err) {
-      console.error('상태 변경 실패:', err);
+      console.error('❌ 상태 변경 실패:', err);
     }
   };
 
